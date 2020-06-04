@@ -27,10 +27,13 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
+ *  - The difference between counteer1 & counter2 is that counter1 returns a function
  * 
  * 2. Which of the two uses a closure? How can you tell?
+ *  - Counter1 uses a closure since it has a nested function which looks outwards.
  * 
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
+ *  - Counter1 would be best to use when you are trying to hold tons of memory, while counter2 would be best when you need something more concise
  *
 */
 
@@ -56,10 +59,8 @@ function counter2() {
 
 Write a function called `inning` that generates a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
 
-function inning(/*Code Here*/){
-
-    /*Code Here*/
-
+function inning() {
+  return(Math.floor(Math.random() * 3));
 }
 
 /* Task 3: finalScore()
@@ -76,11 +77,22 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
+function finalScore(scoreFunc, innings) {
+  let score = {
+    "Home": 0,
+    "Away": 0
+  };
 
-  /*Code Here*/
+  let i = 0;
 
+  while(i < innings) {
+    score["Home"] += scoreFunc();
+    score["Away"] += scoreFunc();
+    i++;
+  }
+  return score;
 }
+console.log(finalScore(inning, 9));
 
 /* Task 4: 
 
@@ -103,8 +115,40 @@ and returns the score at each pont in the game, like so:
 
 Final Score: 6 - 10 */
 
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function scoreboard(scoreFunc, innings) {
+  let home = [scoreFunc()];
+  let away = [scoreFunc()];
+  
+  let numInnings = 1;
+  let scores = [];
+
+  scores.push(`${numInnings} ${ordinal(numInnings)} inning: ${home[numInnings - 1]} - ${away[numInnings - 1]}`)
+  while(numInnings < innings) {
+    home.push(home[numInnings - 1] + scoreFunc());
+    away.push(away[numInnings - 1] + scoreFunc());
+
+    numInnings++;
+    scores.push(`${numInnings} ${ordinal(numInnings)} inning: ${home[numInnings - 1]} - ${away[numInnings - 1]}`)
+  }
+
+  scores.push(`Final Score: ${home[numInnings - 1]} - ${away[numInnings - 1]}`);
+  return scores;
+}
+console.log(scoreboard(inning, 15));
+
+function ordinal(number) {
+  if((number % 100) > 10 && (number % 100) < 20) {
+    return 'th';
+  }
+  if(number % 10 == 1) {
+    return 'st';
+  } else if(number % 10 == 2) {
+    return 'nd';
+  } else if(number % 10 == 3) {
+    return 'rd';
+  } else {
+    return 'th';
+  }
 }
 
 
